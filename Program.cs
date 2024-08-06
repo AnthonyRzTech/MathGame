@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 class Program
 {
@@ -11,58 +12,57 @@ class Program
 public class MathGame
 {
     private static Random random = new Random();
-    private static int score = 0;
+    private static List<string> gameHistory = new List<string>();
 
     public static void RunGameMenu()
     {
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("=== Jeu de Mathématiques ===");
+            Console.WriteLine("=== Math Game ===");
             Console.WriteLine("1. Addition");
-            Console.WriteLine("2. Soustraction");
+            Console.WriteLine("2. Subtraction");
             Console.WriteLine("3. Multiplication");
             Console.WriteLine("4. Division");
-            Console.WriteLine("5. Voir les scores");
-            Console.WriteLine("6. Quitter");
-            Console.Write("Choisissez une option (1-6) : ");
+            Console.WriteLine("5. View game history");
+            Console.WriteLine("6. Quit");
+            Console.Write("Choose an option (1-6): ");
 
             string choice = Console.ReadLine();
 
             switch (choice)
             {
                 case "1":
-                    Console.WriteLine("Vous avez choisi l'addition.");
+                    Console.WriteLine("You chose addition.");
                     (int x, int y) = Level();
                     Addition(x, y);
                     break;
                 case "2":
-                    Console.WriteLine("Vous avez choisi la soustraction.");
+                    Console.WriteLine("You chose subtraction.");
                     (x, y) = Level();
-                    Soustraction(x, y);
+                    Subtraction(x, y);
                     break;
                 case "3":
-                    Console.WriteLine("Vous avez choisi la multiplication.");
+                    Console.WriteLine("You chose multiplication.");
                     (x, y) = Level();
                     Multiplication(x, y);
                     break;
                 case "4":
-                    Console.WriteLine("Vous avez choisi la division.");
-                    (x, y) = Level();
-                    Division(x, y);
+                    Console.WriteLine("You chose division.");
+                    Division();
                     break;
                 case "5":
-                    Console.WriteLine($"Votre score actuel est : {score}");
+                    DisplayHistory();
                     break;
                 case "6":
-                    Console.WriteLine("Merci d'avoir joué ! Au revoir.");
+                    Console.WriteLine("Thanks for playing! Goodbye.");
                     return;
                 default:
-                    Console.WriteLine("Option non valide. Veuillez réessayer.");
+                    Console.WriteLine("Invalid option. Please try again.");
                     break;
             }
 
-            Console.WriteLine("\nAppuyez sur une touche pour continuer...");
+            Console.WriteLine("\nPress any key to continue...");
             Console.ReadKey();
         }
     }
@@ -70,51 +70,54 @@ public class MathGame
     public static void Addition(int x, int y)
     {
         Console.WriteLine($"{x} + {y} = ?");
-        int correctAnswer = x + y;
-        CheckAnswer(correctAnswer);
+        int z = x + y;
+        CheckAnswer(x, y, z, "+");
     }
 
-    public static void Soustraction(int x, int y)
+    public static void Subtraction(int x, int y)
     {
         Console.WriteLine($"{x} - {y} = ?");
-        int correctAnswer = x - y;
-        CheckAnswer(correctAnswer);
+        int z = x - y;
+        CheckAnswer(x, y, z, "-");
     }
 
     public static void Multiplication(int x, int y)
     {
         Console.WriteLine($"{x} * {y} = ?");
-        int correctAnswer = x * y;
-        CheckAnswer(correctAnswer);
+        int z = x * y;
+        CheckAnswer(x, y, z, "*");
     }
 
-    public static void Division(int x, int y)
+    public static void Division()
     {
-        // Assurons-nous que la division soit possible
-        int product = x * y;
-        Console.WriteLine($"{product} / {y} = ?");
-        int correctAnswer = x;
-        CheckAnswer(correctAnswer);
+        int divisor = random.Next(1, 11);  // Divisor between 1 and 10
+        int quotient = random.Next(0, 11);  // Quotient between 0 and 10
+        int dividend = divisor * quotient;  // To ensure integer division
+
+        Console.WriteLine($"{dividend} / {divisor} = ?");
+        CheckAnswer(dividend, divisor, quotient, "/");
     }
 
-    public static void CheckAnswer(int correctAnswer)
+    public static void CheckAnswer(int x, int y, int correctAnswer, string operation)
     {
-        Console.Write("Votre réponse : ");
+        Console.Write("Your answer: ");
         if (int.TryParse(Console.ReadLine(), out int userAnswer))
         {
             if (userAnswer == correctAnswer)
             {
-                Console.WriteLine("Correct ! +1 point");
-                score++;
+                Console.WriteLine("Correct!");
+                gameHistory.Add($"{x} {operation} {y} = {correctAnswer}, User answer: {userAnswer}, Result: Correct");
             }
             else
             {
-                Console.WriteLine($"Incorrect. La bonne réponse était {correctAnswer}.");
+                Console.WriteLine($"Incorrect. The correct answer was {correctAnswer}.");
+                gameHistory.Add($"{x} {operation} {y} = {correctAnswer}, User answer: {userAnswer}, Result: Incorrect");
             }
         }
         else
         {
-            Console.WriteLine("Réponse invalide. Aucun point accordé.");
+            Console.WriteLine("Invalid answer. No points awarded.");
+            gameHistory.Add($"{x} {operation} {y} = {correctAnswer}, User answer: Invalid");
         }
     }
 
@@ -123,33 +126,49 @@ public class MathGame
         while (true)
         {
             Console.Clear();
-            Console.WriteLine("=== Niveau de difficulté ===");
-            Console.WriteLine("1. Facile");
-            Console.WriteLine("2. Moyen");
-            Console.WriteLine("3. Difficile");
-            Console.Write("Choisissez un niveau (1-3) : ");
+            Console.WriteLine("=== Difficulty Level ===");
+            Console.WriteLine("1. Easy");
+            Console.WriteLine("2. Medium");
+            Console.WriteLine("3. Hard");
+            Console.Write("Choose a level (1-3): ");
             string choice = Console.ReadLine();
 
-            int x = 0, y = 0;
+            int min = 0, max = 0;
             switch (choice)
             {
                 case "1":
-                    x = 1; y = 10;
+                    min = 1; max = 10;
                     break;
                 case "2":
-                    x = 11; y = 50;
+                    min = 11; max = 50;
                     break;
                 case "3":
-                    x = 51; y = 100;
+                    min = 51; max = 100;
                     break;
                 default:
-                    Console.WriteLine("Option non valide. Veuillez réessayer.");
+                    Console.WriteLine("Invalid option. Please try again.");
                     continue;
             }
 
-            int num1 = random.Next(x, y + 1);
-            int num2 = random.Next(x, y + 1);
-            return (num1, num2);
+            int x = random.Next(min, max + 1);
+            int y = random.Next(min, max + 1);
+            return (x, y);
+        }
+    }
+
+    public static void DisplayHistory()
+    {
+        Console.WriteLine("=== Game History ===");
+        if (gameHistory.Count == 0)
+        {
+            Console.WriteLine("No games have been played yet.");
+        }
+        else
+        {
+            for (int i = 0; i < gameHistory.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {gameHistory[i]}");
+            }
         }
     }
 }
