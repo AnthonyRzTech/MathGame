@@ -49,7 +49,8 @@ public class MathGame
                     break;
                 case "4":
                     Console.WriteLine("You chose division.");
-                    Division();
+                    (x, y) = Level();
+                    Division(x, y);
                     break;
                 case "5":
                     DisplayHistory();
@@ -88,12 +89,12 @@ public class MathGame
         CheckAnswer(x, y, z, "*");
     }
 
-    public static void Division()
+    public static void Division(int max, int min)
     {
-        int divisor = random.Next(1, 11);  // Divisor between 1 and 10
-        int quotient = random.Next(0, 11);  // Quotient between 0 and 10
-        int dividend = divisor * quotient;  // To ensure integer division
-
+        Random random = new Random();
+        int divisor = random.Next(2, Math.Min(max, 10) + 1); 
+        int quotient = random.Next(Math.Max(1, min), max / divisor + 1);
+        int dividend = divisor * quotient;
         Console.WriteLine($"{dividend} / {divisor} = ?");
         CheckAnswer(dividend, divisor, quotient, "/");
     }
@@ -150,9 +151,7 @@ public class MathGame
                     continue;
             }
 
-            int x = random.Next(min, max + 1);
-            int y = random.Next(min, max + 1);
-            return (x, y);
+            return (max, min);  // Return max and min for use in all operations
         }
     }
 
