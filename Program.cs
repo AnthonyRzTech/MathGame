@@ -97,7 +97,7 @@ public class MathGame
 
     public static void Division(int x, int y)
     {
-        int divisor = random.Next(x, y + 1);  
+        int divisor = random.Next(x + 1, y + 2);  
         int quotient = random.Next(x, y + 1);  
         int dividend = divisor * quotient;  
 
@@ -144,7 +144,7 @@ public class MathGame
             switch (choice)
             {
                 case "1":
-                    min = 1; max = 10;
+                    min = 0; max = 10;
                     break;
                 case "2":
                     min = 11; max = 50;
