@@ -70,31 +70,37 @@ public class MathGame
 
     public static void Addition(int x, int y)
     {
-        Console.WriteLine($"{x} + {y} = ?");
-        int z = x + y;
-        CheckAnswer(x, y, z, "+");
+        int a = random.Next(x, y + 1);
+        int b = random.Next(x, y + 1);
+        Console.WriteLine($"{a} + {b} = ?");
+        int z = a + b;
+        CheckAnswer(a, b, z, "+");
     }
 
     public static void Subtraction(int x, int y)
     {
-        Console.WriteLine($"{x} - {y} = ?");
-        int z = x - y;
-        CheckAnswer(x, y, z, "-");
+        int a = random.Next(x, y + 1);
+        int b = random.Next(x, y + 1);
+        Console.WriteLine($"{a} - {b} = ?");
+        int z = a - b;
+        CheckAnswer(a, b, z, "-");
     }
 
     public static void Multiplication(int x, int y)
     {
-        Console.WriteLine($"{x} * {y} = ?");
-        int z = x * y;
-        CheckAnswer(x, y, z, "*");
+        int a = random.Next(x, y + 1);
+        int b = random.Next(x, y + 1);
+        Console.WriteLine($"{a} * {b} = ?");
+        int z = a * b;
+        CheckAnswer(a, b, z, "*");
     }
 
-    public static void Division(int max, int min)
+    public static void Division(int x, int y)
     {
-        Random random = new Random();
-        int divisor = random.Next(2, Math.Min(max, 10) + 1); 
-        int quotient = random.Next(Math.Max(1, min), max / divisor + 1);
-        int dividend = divisor * quotient;
+        int divisor = random.Next(x, y + 1);  
+        int quotient = random.Next(x, y + 1);  
+        int dividend = divisor * quotient;  
+
         Console.WriteLine($"{dividend} / {divisor} = ?");
         CheckAnswer(dividend, divisor, quotient, "/");
     }
@@ -150,8 +156,7 @@ public class MathGame
                     Console.WriteLine("Invalid option. Please try again.");
                     continue;
             }
-
-            return (max, min);  // Return max and min for use in all operations
+            return (min, max);
         }
     }
 
